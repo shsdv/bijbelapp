@@ -14,16 +14,17 @@ export class MenuItems {
   db: any;
   remote: any;
 
-  constructor(databaseName : string) {
+  constructor(databaseName: string) {
 
     this.db = new PouchDB(databaseName);
 
-    this.remote = 'http://192.168.1.17:5984/' + databaseName;
+    this.remote = 'http://wJvPUP:bOlwofshNZuobBqmhF2bPgZb@185.107.212.121:5984/' + databaseName;
 
     let options = {
-/*      live: true,
-      retry: true,
-      continuous: true*/
+      /*      live: true,
+            retry: true,
+            continuous: true*/
+
     };
     this.db.replicate.from(this.remote, options);
 
