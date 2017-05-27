@@ -7,3 +7,12 @@ C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbe
 C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\obj\Debug\ParseBijbelFiles.exe
 C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\obj\Debug\ParseBijbelFiles.pdb
 C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\RedBranch.Hammock.pdb
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\ParseBijbelFiles.exe.config
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\obj\Debug\ParseBijbelFiles.exe
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\obj\Debug\ParseBijbelFiles.pdb
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\ParseBijbelFiles.exe
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\ParseBijbelFiles.pdb
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\RedBranch.Hammock.dll
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\bin\Debug\RedBranch.Hammock.pdb
+C:\Users\sgeluk\Documents\GitHub\bijbelapp\ParseBijbelFielsv2\ParseBijbelFiles\ParseBijbelFiles\obj\Debug\ParseBijbelFiles.csprojResolveAssemblyReference.cache

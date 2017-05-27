@@ -43,7 +43,7 @@ namespace ParseBijbelFiles
             List<Tuple<string, string>> filesNew = new List<Tuple<string, string>>();
             foreach (string file in files)
             {
-                if (Path.GetFileNameWithoutExtension(file) == "LB")
+                if (Path.GetFileNameWithoutExtension(file) == "NBV")
                 {
                     janFileReader reader = new janFileReader(folder, Path.GetFileNameWithoutExtension(file));
 
@@ -133,6 +133,7 @@ namespace ParseBijbelFiles
                 ids.Add(id);
                 Dictionary<string, string> data = new Dictionary<string, string>();
                 data.Add("text", verses[i].text);
+
                 data.Add("nr", verses[i].versnummer.ToString());
 
                 createOrUpdateDocument(db, id, data);

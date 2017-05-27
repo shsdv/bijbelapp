@@ -50,8 +50,13 @@ namespace ParseBijbelFiles
             Dictionary<int, Dictionary<int, List<Vers>>> returnDict = new Dictionary<int, Dictionary<int, List<Vers>>>();
             List<Vers> currentVerses = new List<Vers>();
             Dictionary<int, List<Vers>> currentDict = new Dictionary<int, List<Vers>>();
+            int startVers = -1;
             for (int i = 0; i < id1s.Count; i++)
             {
+                if (id2s[i] == 12)
+                {
+                    Console.WriteLine("Test");
+                }
 
                 if (prevId2 != id2s[i] || prevId1 != id1s[i])
                 {
@@ -72,12 +77,35 @@ namespace ParseBijbelFiles
                 else
                     versTekst = text.Substring(starts[i]);
 
+
                 int versnummer = id3s[i];
+                if (versTekst == "")
+                {
+                    if(startVers == -1)
+                        startVers = versnummer;
+                    continue;
+                }
 
                 versTekst = Regex.Replace(versTekst, @"<[a-zA-Z]", m => string.Format(@"<my-{0}", m.Value.Substring(1)));
                 versTekst = Regex.Replace(versTekst, @"</[a-zA-Z]", m => string.Format(@"</my-{0}", m.Value.Substring(2)));
+
+                string versnummertekst = versnummer.ToString();
+                if (startVers != -1)
+                {
+                    versnummertekst = startVers + "-" + versnummer;
+                    startVers = -1;
+                }
+                string versTekstTemp = versTekst;
+                string preVersTekst = "";
+                while (versTekstTemp.Trim().StartsWith("<my-tussenkopje"))
+                {
+                    int changeIndex = versTekstTemp.IndexOf("</my-tussenkopje>") + "</my-tussenkopje>".Length;
+                    preVersTekst = preVersTekst + versTekstTemp.Substring(0, changeIndex);
+                    versTekstTemp = versTekstTemp.Substring(changeIndex);
+                }
+                versTekst = preVersTekst + "<sup>" + versnummertekst + "</sup>" + versTekstTemp;
                 
-                Vers vers = new Vers(versnummer, versTekst);
+                Vers vers = new Vers(versnummertekst, versTekst);
                 currentVerses.Add(vers);
             }
             currentDict.Add(prevId2, currentVerses);
@@ -86,10 +114,10 @@ namespace ParseBijbelFiles
         }
         public class Vers
         {
-            public int versnummer;
+            public string versnummer;
             public string text;
 
-            public Vers(int versnummer, string text)
+            public Vers(string versnummer, string text)
             {
                 this.versnummer = versnummer;
                 this.text = text;
