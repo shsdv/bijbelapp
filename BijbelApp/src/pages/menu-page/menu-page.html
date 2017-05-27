@@ -14,13 +14,22 @@
   </ion-navbar>
 
 </ion-header>
+<div class="fixed-content" style="margin-top: 56px;">
 
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-scroll scrollY="true" delegate-handle="listScroller">
 
-<ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="openPage(item)">
-    {{ item.title }}
-  </button>
-  </ion-list>
+          <ion-list>
+            <button ion-item *ngFor="let item of items; let i = index" (click)="openPage(item)" [id]="'id-'+ level + '-' +i">{{ item.title }}</button>
+          </ion-list>
+        </ion-scroll>
+      </ion-col>
 
-</ion-content>
+      <ion-col col-1>
+        <input type="range"  id="scroller" orient="vertical" min="0" max="100"  (change)="showVal(scroller)" [(ngModel)]="scroller"/>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
