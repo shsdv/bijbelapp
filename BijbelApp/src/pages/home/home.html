@@ -18,5 +18,9 @@
 
 <ion-content padding>
     Welkom in de hernieuwde Bijbel app.
-
+        <ion-list>
+            <button ion-item (click)="openMenuPage(item)" *ngFor="let item of data">
+                {{ item.title }}
+            </button>
+        </ion-list>
 </ion-content>
