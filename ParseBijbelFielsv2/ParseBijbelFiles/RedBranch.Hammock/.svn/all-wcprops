@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/84/trunk/RedBranch.Hammock
+END
+RepositoryQueries.cs
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/RepositoryQueries.cs
+END
+Document.cs
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Document.cs
+END
+Repository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Repository.cs
+END
+Query.Result.cs
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Query.Result.cs
+END
+Session.cs
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Session.cs
+END
+StringExtensions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/StringExtensions.cs
+END
+Observer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Observer.cs
+END
+Attachment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Attachment.cs
+END
+ByteArrayConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/ByteArrayConverter.cs
+END
+InvalidDatabaseNameException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/84/trunk/RedBranch.Hammock/InvalidDatabaseNameException.cs
+END
+Reference.cs
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/84/trunk/RedBranch.Hammock/Reference.cs
+END
+Query.Spec.cs
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Query.Spec.cs
+END
+Connection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/82/trunk/RedBranch.Hammock/Connection.cs
+END
+RedBranch.Hammock.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/84/trunk/RedBranch.Hammock/RedBranch.Hammock.csproj
+END
+Query.cs
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/Query.cs
+END
+EntitySerializer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/80/trunk/RedBranch.Hammock/EntitySerializer.cs
+END

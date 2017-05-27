@@ -1,0 +1,6 @@
+C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\RedBranch.Hammock\obj\Debug\RedBranch.Hammock.csprojResolveAssemblyReference.cache
+C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\RedBranch.Hammock\bin\Debug\RedBranch.Hammock.dll
+C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\RedBranch.Hammock\bin\Debug\RedBranch.Hammock.pdb
+C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\RedBranch.Hammock\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\RedBranch.Hammock\obj\Debug\RedBranch.Hammock.dll
+C:\Users\sgeluk\Dropbox\BijbelApp\ParseBijbelFielsv2\ParseBijbelFiles\RedBranch.Hammock\obj\Debug\RedBranch.Hammock.pdb

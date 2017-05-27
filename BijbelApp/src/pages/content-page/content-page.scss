@@ -1,0 +1,22 @@
+page-content-page {
+    sup {
+        color: Red;
+        
+    }
+    my-tussenkopje {
+
+        font-size: 2em;
+        display: block;
+        color: brown;
+    }
+    my-tussenkopje[formaat="boektitel"]{
+        font-size: 3em;
+    }
+    my-kleinkapitaal {
+        font-variant: small-caps;
+    }
+    my-noot {
+
+        display: none;
+    }
+}
