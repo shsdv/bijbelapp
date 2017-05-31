@@ -11,6 +11,8 @@ import { ContentPage } from '../pages/content-page/content-page';
 
 import { SettingsPage } from '../pages/settings-page/settings-page';
 import { SafePipe } from '../pipes/safe-pipe';
+import { SyncSettingsPage } from '../pages/sync-settings-page/sync-settings-page';
+import { Synchronizer } from '../providers/synchronizer';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { SafePipe } from '../pipes/safe-pipe';
     MenuPage,
     ContentPage,
     SettingsPage,
-    SafePipe
+    SyncSettingsPage,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
@@ -31,12 +34,14 @@ import { SafePipe } from '../pipes/safe-pipe';
     HomePage,
     MenuPage,
     ContentPage,
+    SyncSettingsPage,
     SettingsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     SafePipe,
+    Synchronizer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })

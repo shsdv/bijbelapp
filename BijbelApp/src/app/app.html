@@ -9,6 +9,8 @@
             <ion-list-header>Algemeen</ion-list-header>
             <button ion-item menuToggle (click)="openPage(rootPage)"><ion-icon name="home" item-left></ion-icon>Welkom</button>
             <button ion-item menuToggle (click)="openPage(settingsPage)"><ion-icon name="settings" item-left></ion-icon>Instellingen</button>
+            <button ion-item menuToggle (click)="openPage(syncSettingsPage)"><ion-icon name="sync" item-left></ion-icon>Synchronisatie instellingen</button>
+
             <ion-list-header>Inhoud</ion-list-header>
             <button ion-item menuToggle (click)="openMenuPage(item)" *ngFor="let item of data">
                 {{ item.title }}

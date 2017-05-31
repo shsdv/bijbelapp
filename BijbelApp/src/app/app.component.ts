@@ -7,12 +7,14 @@ import { MenuItems } from '../providers/menu-items';
 import { HomePage } from '../pages/home/home';
 import { MenuPage } from '../pages/menu-page/menu-page';
 import { SettingsPage } from '../pages/settings-page/settings-page';
+import { SyncSettingsPage } from '../pages/sync-settings-page/sync-settings-page';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage:any = HomePage;
   settingsPage:any = SettingsPage;
+  syncSettingsPage: any = SyncSettingsPage;
   data : any;
   menuService : MenuItems;
   @ViewChild("rootNavController") nav;
