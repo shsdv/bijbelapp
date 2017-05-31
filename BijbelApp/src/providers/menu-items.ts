@@ -30,7 +30,7 @@ export class MenuItems {
     };
     this.db.replicate.from(this.remote, options);*/
 
-    this.db = new PouchDB('http://wJvPUP:bOlwofshNZuobBqmhF2bPgZb@185.107.212.121:5984/' + databaseName);
+    this.db = new PouchDB('https://wJvPUP:bOlwofshNZuobBqmhF2bPgZb@185.107.212.121.xip.io:5984/' + databaseName);
 
   }
 
