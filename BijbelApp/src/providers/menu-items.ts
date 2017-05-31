@@ -13,20 +13,24 @@ export class MenuItems {
   data: any;
   db: any;
   remote: any;
-
-  constructor(databaseName: string) {
-
-    this.db = new PouchDB(databaseName);
+  startkey : string;
+  endkey : string;
+  constructor(databaseName: string, startkey: string, endkey: string) {
+    this.startkey = startkey;
+    this.endkey = endkey;
+    /*this.db = new PouchDB(databaseName);
 
     this.remote = 'http://wJvPUP:bOlwofshNZuobBqmhF2bPgZb@185.107.212.121:5984/' + databaseName;
 
     let options = {
-      /*      live: true,
-            retry: true,
-            continuous: true*/
+      //     live: true,
+       //     retry: true,
+       //     continuous: true
 
     };
-    this.db.replicate.from(this.remote, options);
+    this.db.replicate.from(this.remote, options);*/
+
+    this.db = new PouchDB('http://wJvPUP:bOlwofshNZuobBqmhF2bPgZb@185.107.212.121:5984/' + databaseName);
 
   }
 
@@ -38,13 +42,14 @@ export class MenuItems {
     return new Promise(resolve => {
 
       this.db.allDocs({
-
+        startkey : this.startkey, 
+        endkey : this.endkey,
         include_docs: true
 
       }).then((result) => {
 
         this.data = [];
-
+        console.log(result);
         let docs = result.rows.map((row) => {
           this.data.push(row.doc);
         });
@@ -66,7 +71,7 @@ export class MenuItems {
   }
 
   handleChange(change) {
-
+    console.log("Change: " + change);
     let changedDoc = null;
     let changedIndex = null;
 

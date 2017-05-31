@@ -23,11 +23,13 @@ export class MenuPage {
   level: any;
   scroller: string;
   automaticChange: boolean = false;
+  dbname: string;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.level = 1;
     this.scroller = "100";
     this.pageTitle = navParams.get("title");
-    this.menuService = new MenuItems(navParams.get("dbname"));
+    this.dbname = navParams.get("dbname");
+    this.menuService = new MenuItems(navParams.get("dbname"), navParams.get("startkey"), navParams.get("endkey"));
     if (navParams.get("newLevel")) {
       this.level = navParams.get("newLevel");
     }
@@ -60,20 +62,25 @@ export class MenuPage {
 
   openPage(item) {
     console.log(item);
-    if (item.hasOwnProperty("dbname")) {
-      item.newLevel = this.level + 1;
-      this.navCtrl.push(MenuPage, item);
-    } else if (item.hasOwnProperty("contentDB")) {
+    item.newLevel = this.level + 1;
+
+    if (!item.hasOwnProperty("dbname")) {
+      item.dbname = this.dbname;
+    }
+    if (item.hasOwnProperty("nextIsContent") && item.nextIsContent == "1") {
       this.navCtrl.push(ContentPage, item);
+    } else {
+      this.navCtrl.push(MenuPage, item);
     }
   }
+
 
   showVal() {
     let scrollElement: HTMLDivElement = <HTMLDivElement>(document.getElementById('listScroll' + this.level).childNodes[0]);
 
     let scrollValue = Number(this.scroller);
     this.automaticChange = true;
-    scrollElement.scrollTop = (100 - scrollValue)/100 * (scrollElement.scrollHeight - scrollElement.offsetHeight);
+    scrollElement.scrollTop = (100 - scrollValue) / 100 * (scrollElement.scrollHeight - scrollElement.offsetHeight);
     console.log(scrollElement);
     console.log(scrollElement.scrollTop);
   }

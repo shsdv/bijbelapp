@@ -23,7 +23,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      this.menuService = new MenuItems("hoofdmenu");
+      this.menuService = new MenuItems("hoofdmenu", "", "\uffff");
       this.menuService.getMenuItems().then((data) => {
         this.data = data;
         console.log(data);

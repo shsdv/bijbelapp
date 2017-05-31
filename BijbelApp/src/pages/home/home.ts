@@ -13,7 +13,7 @@ export class HomePage {
   menuService : any;
   data : any;
    constructor(public navCtrl: NavController, public navParams: NavParams) {
-     this.menuService = new MenuItems("hoofdmenu");
+     this.menuService = new MenuItems("hoofdmenu", "", "\uffff");
       this.menuService.getMenuItems().then((data) => {
         this.data = data;
         console.log(data);

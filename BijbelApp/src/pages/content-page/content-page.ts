@@ -18,7 +18,7 @@ export class ContentPage {
   pageTitle : any;
   dataService: MenuItems;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.dataService = new MenuItems(navParams.get("contentDB"));
+    this.dataService = new MenuItems(navParams.get("dbname"), navParams.get("startkey"), navParams.get("endkey"));
     this.pageTitle = navParams.get("contentTitle");
   }
 
