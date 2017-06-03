@@ -16,25 +16,27 @@ export class Synchronizer {
   constructor(public settingsProvider: Settings) {
     console.log('Hello Synchronizer Provider');
     this.getSyncList().then(list => {
-      list.forEach(dbname => {
-        this.localdbs[dbname] = new PouchDB(dbname);
-        let remote = this.settingsProvider.getDbUri() + dbname;
+      if (list != null) {
+        list.forEach(dbname => {
+          this.localdbs[dbname] = new PouchDB(dbname);
+          let remote = this.settingsProvider.getDbUri() + dbname;
 
-        this.remotedbs[dbname] = new PouchDB(remote);
+          this.remotedbs[dbname] = new PouchDB(remote);
 
-        let options = {
-          live: true,
-          retry: true,
-          continuous: true,
-          Auth: {
-            username: 'wJvPUP',
-            password: 'bOlwofshNZuobBqmhF2bPgZb'
-          }
+          let options = {
+            live: true,
+            retry: true,
+            continuous: true,
+            Auth: {
+              username: 'wJvPUP',
+              password: 'bOlwofshNZuobBqmhF2bPgZb'
+            }
 
-        };
+          };
 
-        this.localdbs[dbname].replicate.from(this.remotedbs[dbname], options);
-      });
+          this.localdbs[dbname].replicate.from(this.remotedbs[dbname], options);
+        });
+      }
     });
   }
 
