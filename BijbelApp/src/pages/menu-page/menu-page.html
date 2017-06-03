@@ -22,7 +22,9 @@
         <ion-scroll scrollY="true" [id]="'listScroll' + level" on-scroll="test()">
 
           <ion-list>
-            <button ion-item *ngFor="let item of items; let i = index" (click)="openPage(item)" [id]="'id-'+ level + '-' +i">{{ item.title }}</button>
+            <button ion-item *ngFor="let item of items; let i = index" (click)="openPage(item)" [id]="'id-'+ level + '-' +i" [disabled]="item.disabled | async">
+              {{ item.title }}
+            </button>
           </ion-list>
         </ion-scroll>
       </ion-col>

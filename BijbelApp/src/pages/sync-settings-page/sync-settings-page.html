@@ -19,10 +19,20 @@
 
 <ion-content>
   <ion-list>
+    <ion-item-group>
+      <ion-item-divider color="light">Algemene instellingen</ion-item-divider>
+      <ion-item>
+        <ion-label>Gebruik alleen gesynchroniseerde bestanden</ion-label>
+        <ion-toggle [checked]="onlySynct | async" (ionChange)="changeOnlySynct($event)"></ion-toggle>
+      </ion-item>
+    </ion-item-group>
+
     <ion-item-group *ngFor="let item of items; let i = index">
       <ion-item-divider color="light">{{ item.title }}</ion-item-divider>
-      <ion-item *ngFor="let subitem of item.subitems"><ion-label>{{ subitem.title }}</ion-label>       <ion-toggle checked="false"></ion-toggle>
-</ion-item>
+      <ion-item *ngFor="let subitem of item.subitems">
+        <ion-label>{{ subitem.title }}</ion-label>
+        <ion-toggle [checked]="subitem.synct | async" (ionChange)="changeVal($event, subitem.dbname)"></ion-toggle>
+      </ion-item>
     </ion-item-group>
   </ion-list>
 </ion-content>

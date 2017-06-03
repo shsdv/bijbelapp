@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MenuItems } from '../../providers/menu-items';
 import { ContentPage } from '../content-page/content-page';
 import { Scroll } from 'ionic-angular';
-
+import { Synchronizer } from '../../providers/synchronizer';
 /**
  * Generated class for the MenuPage page.
  *
@@ -24,7 +24,7 @@ export class MenuPage {
   scroller: string;
   automaticChange: boolean = false;
   dbname: string;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public syncProvider : Synchronizer) {
     this.level = 1;
     this.scroller = "100";
     this.pageTitle = navParams.get("title");
@@ -56,7 +56,15 @@ export class MenuPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MenuPage');
     this.menuService.getMenuItems().then((data) => {
+      data.forEach(element => {
+        if(element.hasOwnProperty("dbname")) {
+          element.disabled = this.syncProvider.isAvailable(element.dbname).then(val => {return !val});
+        } else {
+          element.disabled = false;
+        }
+      });
       this.items = data;
+
     });
   }
 

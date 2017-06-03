@@ -13,6 +13,7 @@ import { SettingsPage } from '../pages/settings-page/settings-page';
 import { SafePipe } from '../pipes/safe-pipe';
 import { SyncSettingsPage } from '../pages/sync-settings-page/sync-settings-page';
 import { Synchronizer } from '../providers/synchronizer';
+import { Settings } from '../providers/settings';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { Synchronizer } from '../providers/synchronizer';
     SplashScreen,
     SafePipe,
     Synchronizer,
+    Settings,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })

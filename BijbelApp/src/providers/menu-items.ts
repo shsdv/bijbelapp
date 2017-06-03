@@ -1,5 +1,6 @@
 import 'rxjs/add/operator/map';
 import PouchDB from 'pouchdb';
+import { Settings } from './settings';
 
 /*
   Generated class for the MenuItems provider.
@@ -15,6 +16,7 @@ export class MenuItems {
   remote: any;
   startkey : string;
   endkey : string;
+  
   constructor(databaseName: string, startkey: string, endkey: string) {
     this.startkey = startkey;
     this.endkey = endkey;
@@ -29,11 +31,11 @@ export class MenuItems {
 
     };
     this.db.replicate.from(this.remote, options);*/
-
-    this.db = new PouchDB('http://wJvPUP:bOlwofshNZuobBqmhF2bPgZb@185.107.212.121:5984/' + databaseName);
+    let settingsProvider  = new Settings;
+    this.db = new PouchDB(settingsProvider.getDbUri() + databaseName);
 
   }
-
+  
   getMenuItems() {
     if (this.data) {
       return Promise.resolve(this.data);
@@ -56,9 +58,9 @@ export class MenuItems {
 
         resolve(this.data);
 
-        this.db.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
+        /*this.db.changes({ live: true, since: 'now', include_docs: true }).on('change', (change) => {
           this.handleChange(change);
-        });
+        });*/
 
       }).catch((error) => {
 

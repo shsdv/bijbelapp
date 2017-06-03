@@ -13,13 +13,15 @@ import { Synchronizer } from '../../providers/synchronizer';
 @Component({
   selector: 'page-sync-settings-page',
   templateUrl: 'sync-settings-page.html',
+
 })
 export class SyncSettingsPage {
-  menuService : MenuItems;
+  menuService: MenuItems;
   items: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public syncProvider : Synchronizer) {
-      this.menuService = new MenuItems("hoofdmenu", "", "\uffff");
+  onlySynct : Promise<boolean> = this.syncProvider.getOnlySynctAvailable();
+  constructor(public navCtrl: NavController, public navParams: NavParams, public syncProvider: Synchronizer) {
+    this.menuService = new MenuItems("hoofdmenu", "", "\uffff");
+    this.syncProvider.isSynct("bijbel_sv").then(test => console.log(test));
   }
 
   ionViewDidLoad() {
@@ -30,9 +32,24 @@ export class SyncSettingsPage {
         element.menuItemsProvider = new MenuItems(element.dbname, "", "\uffff");
         element.menuItemsProvider.getMenuItems().then((data) => {
           element.subitems = data;
+          data.forEach(doc => {
+            doc.synct = this.syncProvider.isSynct(doc.dbname);
+          });
         });
       });
     });
   }
+  changeOnlySynct(event: any) {
+    this.syncProvider.setOnlySynctAvailable(event.value);
+  }
+  changeVal(event: any, dbname: string) {
+    if (event.value) {
+      console.log("Turning on synchronisation for: " + dbname)
+      this.syncProvider.setSyncOn(dbname);
+    } else {
+      console.log("Turning off synchronisation for: " + dbname)
+      this.syncProvider.setSyncOff(dbname);
 
+    }
+  }
 }
