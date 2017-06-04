@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { MenuItems } from '../../providers/menu-items';
 import { ContentPage } from '../content-page/content-page';
 import { Scroll } from 'ionic-angular';
 import { Synchronizer } from '../../providers/synchronizer';
@@ -19,17 +18,19 @@ export class MenuPage {
   @ViewChild(Scroll) ListScroller: Scroll;
   pageTitle: any;
   items: any;
-  menuService: MenuItems;
   level: any;
   scroller: string;
   automaticChange: boolean = false;
   dbname: string;
+  startkey : string;
+  endkey : string;
   constructor(public navCtrl: NavController, public navParams: NavParams, public syncProvider : Synchronizer) {
     this.level = 1;
     this.scroller = "100";
     this.pageTitle = navParams.get("title");
     this.dbname = navParams.get("dbname");
-    this.menuService = new MenuItems(navParams.get("dbname"), navParams.get("startkey"), navParams.get("endkey"));
+    this.startkey = navParams.get("startkey");
+    this.endkey = navParams.get("endkey");
     if (navParams.get("newLevel")) {
       this.level = navParams.get("newLevel");
     }
@@ -55,7 +56,7 @@ export class MenuPage {
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad MenuPage');
-    this.menuService.getMenuItems().then((data) => {
+    this.syncProvider.getItemsFromDb(this.dbname, this.startkey, this.endkey).then((data) => {
       data.forEach(element => {
         if(element.hasOwnProperty("dbname")) {
           element.disabled = this.syncProvider.isAvailable(element.dbname).then(val => {return !val});

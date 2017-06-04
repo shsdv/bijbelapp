@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { MenuItems } from '../../providers/menu-items';
+import { Synchronizer } from '../../providers/synchronizer';
 
 /**
  * Generated class for the ContentPage page.
@@ -16,15 +16,20 @@ import { MenuItems } from '../../providers/menu-items';
 export class ContentPage {
   verses: any;
   pageTitle : any;
-  dataService: MenuItems;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.dataService = new MenuItems(navParams.get("dbname"), navParams.get("startkey"), navParams.get("endkey"));
+  dbname : string;
+  startkey: string;
+  endkey : string;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public syncProvider : Synchronizer) {
+    this.dbname = navParams.get("dbname");
+    this.startkey = navParams.get("startkey");
+    this.endkey = navParams.get("endkey");
+    
     this.pageTitle = navParams.get("contentTitle");
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ContentPage');
-    this.dataService.getMenuItems().then((data) => {
+    this.syncProvider.getItemsFromDb(this.dbname, this.startkey, this.endkey).then((data) => {
       this.verses = data;
       console.log(data);
     });

@@ -18,27 +18,88 @@ export class Synchronizer {
     this.getSyncList().then(list => {
       if (list != null) {
         list.forEach(dbname => {
-          this.localdbs[dbname] = new PouchDB(dbname);
-          let remote = this.settingsProvider.getDbUri() + dbname;
-
-          this.remotedbs[dbname] = new PouchDB(remote);
-
-          let options = {
-            live: true,
-            retry: true,
-            continuous: true,
-            Auth: {
-              username: 'wJvPUP',
-              password: 'bOlwofshNZuobBqmhF2bPgZb'
-            }
-
-          };
-
-          this.localdbs[dbname].replicate.from(this.remotedbs[dbname], options);
+          this.synchronizeDb(dbname);
         });
       }
+      this.synchronizeDb("hoofdmenu");
+      this.getItemsFromDb("hoofdmenu", "", "\uffff").then(items => {
+        items.forEach(element => {
+          this.synchronizeDb(element.dbname);
+        });
+      });
     });
   }
+  getItemsFromDb(dbname, startkey, endkey) : Promise<any[]> {
+    return new Promise(resolve => {
+
+      this.getDb(dbname).allDocs({
+        startkey: startkey,
+        endkey: endkey,
+        include_docs: true
+
+      }).then((result) => {
+
+        let data = [];
+        console.log(result);
+        let docs = result.rows.map((row) => {
+          data.push(row.doc);
+        });
+
+        resolve(data);
+      }).catch((error) => {
+
+        console.log(error);
+
+      });
+    });
+  }
+  destroyLocalDb(dbname) {
+    let localDb = this.getOrCreateLocalDb(dbname);
+    localDb.destroy().then(result => {
+      console.log("Deleted: " + dbname);
+      delete this.localdbs[dbname];
+    }).catch(e => { console.log(e) });
+  }
+  synchronizeDb(dbname) {
+    let localDb = this.getOrCreateLocalDb(dbname);
+    let remoteDb = this.getOrMakeRemoteDb(dbname);
+    console.log("Synchronizing db: " + dbname);
+    console.log("Local db: " + this.localdbs[dbname]);
+    console.log("Remote db: " + this.remotedbs[dbname]);
+    let options = {
+      live: true,
+      retry: true,
+      continuous: true,
+    };
+    localDb.replicate.from(remoteDb, options);
+    console.log("Started syncing");
+  }
+  getOrCreateLocalDb(dbname) {
+    if (this.localdbs.hasOwnProperty(dbname)) {
+      return this.localdbs[dbname];
+    } else {
+      this.localdbs[dbname] = new PouchDB(dbname);
+      return this.localdbs[dbname];
+    }
+  }
+  getDb(dbname) {
+    if (this.localdbs.hasOwnProperty(dbname)) {
+      return this.localdbs[dbname];
+    } else {
+      return this.getOrMakeRemoteDb(dbname);
+    }
+  }
+
+  getOrMakeRemoteDb(dbname) {
+    if (!this.remotedbs.hasOwnProperty(dbname)) {
+      let uri = this.settingsProvider.getDbUri() + dbname;
+      console.log("Remote uri: "+ uri);
+      this.remotedbs[dbname] = new PouchDB(uri);
+    }
+    return this.remotedbs[dbname];
+
+  }
+
 
   getOnlySynctAvailable(): Promise<boolean> {
     return this.settingsProvider.getSetting("onlySynct").then(val => {
@@ -95,7 +156,7 @@ export class Synchronizer {
           } else {
             list.push(dbname);
           }
-
+          this.synchronizeDb(dbname);
           return this.setSyncList(list);
         });
       }
@@ -107,6 +168,7 @@ export class Synchronizer {
       if (isSynct) {
         this.getSyncList().then(list => {
           list.splice(list.indexOf(dbname), 1);
+          this.destroyLocalDb(dbname);
           return this.setSyncList(list);
         });
       }

@@ -16,21 +16,17 @@ import { Synchronizer } from '../../providers/synchronizer';
 
 })
 export class SyncSettingsPage {
-  menuService: MenuItems;
   items: any;
   onlySynct : Promise<boolean> = this.syncProvider.getOnlySynctAvailable();
   constructor(public navCtrl: NavController, public navParams: NavParams, public syncProvider: Synchronizer) {
-    this.menuService = new MenuItems("hoofdmenu", "", "\uffff");
-    this.syncProvider.isSynct("bijbel_sv").then(test => console.log(test));
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SyncSettingsPage');
-    this.menuService.getMenuItems().then((data) => {
+    this.syncProvider.getItemsFromDb("hoofdmenu", "", "\uffff").then((data) => {
       this.items = data;
       this.items.forEach(element => {
-        element.menuItemsProvider = new MenuItems(element.dbname, "", "\uffff");
-        element.menuItemsProvider.getMenuItems().then((data) => {
+        this.syncProvider.getItemsFromDb(element.dbname, "", "\uffff").then((data) => {
           element.subitems = data;
           data.forEach(doc => {
             doc.synct = this.syncProvider.isSynct(doc.dbname);
