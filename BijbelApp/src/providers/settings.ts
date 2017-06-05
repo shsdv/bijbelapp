@@ -65,7 +65,7 @@ export class Settings {
     let username = this.getLoginNameForServer();
     let password = this.getPasswordForServer();
     return Promise.all([username, password]).then(result => {
-      return 'http://' + result[0] + ':' + result[1] + '@185.107.212.121:5984/';
+      return 'http://185.107.212.121:5984/';
     });
   }
   getDbUriDifferentCredentials(username : string, password : string) : string {
@@ -91,7 +91,7 @@ export class Settings {
       }
     });
   }
-  private getLoginNameForServer(): Promise<string> {
+   getLoginNameForServer(): Promise<string> {
     return this.getSetting(this.usernameSettingStr).then(name => {
       if (name == null) {
         return "wJvPUP";
@@ -100,7 +100,7 @@ export class Settings {
       }
     });
   }
-  private getPasswordForServer(): Promise<string> {
+   getPasswordForServer(): Promise<string> {
     return this.getSetting(this.passwordSettingStr).then(pwd => {
       if (pwd == null) {
         return "bOlwofshNZuobBqmhF2bPgZb";

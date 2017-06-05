@@ -17,8 +17,8 @@ export class Synchronizer {
     console.log('Hello Synchronizer Provider');
     this.syncAllDbs();
   }
-  syncAllDbs(){ 
-        this.getSyncList().then(list => {
+  syncAllDbs() {
+    this.getSyncList().then(list => {
       if (list != null) {
         list.forEach(dbname => {
           this.synchronizeDb(dbname);
@@ -36,7 +36,7 @@ export class Synchronizer {
   }
 
   usernamePasswordChanged() {
-    
+
   }
 
   getItemsFromDb(dbname, startkey, endkey): Promise<any[]> {
@@ -53,7 +53,7 @@ export class Synchronizer {
           let data = [];
           console.log(result);
           let docs = result.rows.map((row) => {
-            if(!row.doc._id.startsWith("_")){
+            if (!row.doc._id.startsWith("_")) {
               data.push(row.doc);
             }
           });
@@ -109,13 +109,23 @@ export class Synchronizer {
 
   getOrMakeRemoteDb(dbname): Promise<any> {
     return this.settingsProvider.getDbUri().then(baseUri => {
-      if (!this.remotedbs.hasOwnProperty(dbname)) {
+      let uname = this.settingsProvider.getLoginNameForServer();
+      let pwd = this.settingsProvider.getPasswordForServer();
+      return Promise.all([uname, pwd]).then(val => {
+        if (!this.remotedbs.hasOwnProperty(dbname)) {
 
-        let uri = baseUri + dbname;
-        console.log("Remote uri: " + uri);
-        this.remotedbs[dbname] = new PouchDB(uri);
-      }
-      return this.remotedbs[dbname];
+          let options = {
+            auth: {
+              username: val[0],
+              password: val[1]
+            }
+          };
+          let uri = baseUri + dbname;
+          console.log("Remote uri: " + uri);
+          this.remotedbs[dbname] = new PouchDB(uri, options);
+        }
+        return this.remotedbs[dbname];
+      });
     });
   }
 
