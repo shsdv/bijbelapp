@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Settings } from '../../providers/settings';
+import {Loginregister} from '../loginregister/loginregister';
 
 /**
  * Generated class for the SettingsPage page.
@@ -13,12 +15,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'settings-page.html',
 })
 export class SettingsPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams ) {
+  loginName : Promise<string>;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public settingsProvider : Settings ) {
+    this.loginName = settingsProvider.getLoginName();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
+  }
+
+  loginRegister() {
+    this.navCtrl.push(Loginregister);
   }
 
 }

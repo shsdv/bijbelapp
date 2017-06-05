@@ -15,7 +15,10 @@ export class Synchronizer {
   private remotedbs: any[] = [];
   constructor(public settingsProvider: Settings) {
     console.log('Hello Synchronizer Provider');
-    this.getSyncList().then(list => {
+    this.syncAllDbs();
+  }
+  syncAllDbs(){ 
+        this.getSyncList().then(list => {
       if (list != null) {
         list.forEach(dbname => {
           this.synchronizeDb(dbname);
@@ -23,81 +26,97 @@ export class Synchronizer {
       }
       this.synchronizeDb("hoofdmenu");
       this.getItemsFromDb("hoofdmenu", "", "\uffff").then(items => {
+        console.log(items);
         items.forEach(element => {
           this.synchronizeDb(element.dbname);
         });
       });
     });
+
   }
-  getItemsFromDb(dbname, startkey, endkey) : Promise<any[]> {
+
+  usernamePasswordChanged() {
+    
+  }
+
+  getItemsFromDb(dbname, startkey, endkey): Promise<any[]> {
     return new Promise(resolve => {
 
-      this.getDb(dbname).allDocs({
-        startkey: startkey,
-        endkey: endkey,
-        include_docs: true
+      this.getDb(dbname).then(db => {
+        db.allDocs({
+          startkey: startkey,
+          endkey: endkey,
+          include_docs: true
 
-      }).then((result) => {
+        }).then((result) => {
 
-        let data = [];
-        console.log(result);
-        let docs = result.rows.map((row) => {
-          data.push(row.doc);
+          let data = [];
+          console.log(result);
+          let docs = result.rows.map((row) => {
+            if(!row.doc._id.startsWith("_")){
+              data.push(row.doc);
+            }
+          });
+
+          resolve(data);
+        }).catch((error) => {
+
+          console.log(error);
+
         });
-
-        resolve(data);
-      }).catch((error) => {
-
-        console.log(error);
-
       });
     });
   }
   destroyLocalDb(dbname) {
-    let localDb = this.getOrCreateLocalDb(dbname);
-    localDb.destroy().then(result => {
-      console.log("Deleted: " + dbname);
-      delete this.localdbs[dbname];
-    }).catch(e => { console.log(e) });
+    this.getOrCreateLocalDb(dbname).then(localDb => {
+      localDb.destroy().then(result => {
+        console.log("Deleted: " + dbname);
+        delete this.localdbs[dbname];
+      }).catch(e => { console.log(e) });
+    });
   }
   synchronizeDb(dbname) {
     let localDb = this.getOrCreateLocalDb(dbname);
     let remoteDb = this.getOrMakeRemoteDb(dbname);
-    console.log("Synchronizing db: " + dbname);
-    console.log("Local db: " + this.localdbs[dbname]);
-    console.log("Remote db: " + this.remotedbs[dbname]);
-    let options = {
-      live: true,
-      retry: true,
-      continuous: true,
-    };
-    localDb.replicate.from(remoteDb, options);
-    console.log("Started syncing");
+    Promise.all([localDb, remoteDb]).then(values => {
+      let local = values[0];
+      let remote = values[1];
+      let options = {
+        live: true,
+        retry: true,
+        continuous: true,
+      };
+
+      local.replicate.from(remote, options);
+      console.log("Started syncing");
+    });
   }
-  getOrCreateLocalDb(dbname) {
+  getOrCreateLocalDb(dbname): Promise<any> {
     if (this.localdbs.hasOwnProperty(dbname)) {
-      return this.localdbs[dbname];
+      return Promise.resolve(this.localdbs[dbname]);
     } else {
       this.localdbs[dbname] = new PouchDB(dbname);
-      return this.localdbs[dbname];
+      return Promise.resolve(this.localdbs[dbname]);
     }
   }
-  getDb(dbname) {
+  getDb(dbname): Promise<any> {
     if (this.localdbs.hasOwnProperty(dbname)) {
-      return this.localdbs[dbname];
+      return Promise.resolve(this.localdbs[dbname]);
     } else {
       return this.getOrMakeRemoteDb(dbname);
     }
   }
 
-  getOrMakeRemoteDb(dbname) {
-    if (!this.remotedbs.hasOwnProperty(dbname)) {
-      let uri = this.settingsProvider.getDbUri() + dbname;
-      console.log("Remote uri: "+ uri);
-      this.remotedbs[dbname] = new PouchDB(uri);
-    }
-    return this.remotedbs[dbname];
+  getOrMakeRemoteDb(dbname): Promise<any> {
+    return this.settingsProvider.getDbUri().then(baseUri => {
+      if (!this.remotedbs.hasOwnProperty(dbname)) {
 
+        let uri = baseUri + dbname;
+        console.log("Remote uri: " + uri);
+        this.remotedbs[dbname] = new PouchDB(uri);
+      }
+      return this.remotedbs[dbname];
+    });
   }
 
 

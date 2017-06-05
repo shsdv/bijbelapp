@@ -14,7 +14,7 @@ import { SafePipe } from '../pipes/safe-pipe';
 import { SyncSettingsPage } from '../pages/sync-settings-page/sync-settings-page';
 import { Synchronizer } from '../providers/synchronizer';
 import { Settings } from '../providers/settings';
-
+import { Loginregister } from '../pages/loginregister/loginregister';
 @NgModule({
   declarations: [
     MyApp,
@@ -24,6 +24,7 @@ import { Settings } from '../providers/settings';
     SettingsPage,
     SyncSettingsPage,
     SafePipe,
+    Loginregister
   ],
   imports: [
     BrowserModule,
@@ -36,7 +37,8 @@ import { Settings } from '../providers/settings';
     MenuPage,
     ContentPage,
     SyncSettingsPage,
-    SettingsPage
+    SettingsPage,
+    Loginregister
   ],
   providers: [
     StatusBar,
