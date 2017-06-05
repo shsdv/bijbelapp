@@ -65,11 +65,11 @@ export class Settings {
     let username = this.getLoginNameForServer();
     let password = this.getPasswordForServer();
     return Promise.all([username, password]).then(result => {
-      return 'http://185.107.212.121:5984/';
+      return 'https://bijbelapp.duckdns.org:5984/';
     });
   }
   getDbUriDifferentCredentials(username : string, password : string) : string {
-    return 'http://' + username + ':' + password + '@185.107.212.121:5984/';
+    return 'https://' + username + ':' + password + '@bijbelapp.duckdns.org:5984/';
   }
   private usernameSettingStr: string = "username";
   private passwordSettingStr: string = "password";

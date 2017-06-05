@@ -30,7 +30,7 @@ export class Loginregister {
 
   login() {
     console.log("Loggin in user " + this.username + " with " + this.password);
-    let uri = "http://185.107.212.121/login.php";
+    let uri = "https://bijbelapp.duckdns.org/login.php";
     var self = this;
     request.post(uri,
       { form: { email: this.username, password: this.password } },
@@ -45,7 +45,7 @@ export class Loginregister {
   }
   register() {
     console.log("Register user " + this.username + " with " + this.password);
-    let uri = "http://185.107.212.121/register.php";
+    let uri = "https://bijbelapp.duckdns.org/register.php";
     var self = this;
     request.post(uri,
       { form: { email: this.username, password: this.password } },
