@@ -14,7 +14,6 @@
 
 
 <ion-content padding>
-  <span *ngFor="let vers of verses"  >
-    <span [innerHTML] ="vers.text | safe: 'html'"></span>
+  <span *ngFor="let vers of verses"  [innerHTML] ="vers.text | safe: 'html'">
     </span>
 </ion-content>

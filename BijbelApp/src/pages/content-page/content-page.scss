@@ -18,5 +18,38 @@ page-content-page {
     my-noot {
 
         display: none;
-    }
+    } 
+    my-vers[en="1"]:after { 
+        content: "\A";
+        white-space: pre; 
+     }
+    my-vers[en="2"]:after { 
+        content: "\A\A";
+        white-space: pre; 
+     }
+    my-vers[en="3"]:after { 
+        content: "\A\A\A";
+        white-space: pre; 
+     }
+    my-vers[en="4"]:after { 
+        content: "\A\A\A\A";
+        white-space: pre; 
+     }
+     my-vers[bn="1"]:before {
+         content: "\A";
+         white-space: pre;
+     }
+    my-vers[bn="1"]:before {
+         content: "\A\A";
+         white-space: pre;
+     }
+    my-vers[bn="1"]:before {
+         content: "\A\A\A";
+         white-space: pre;
+     }
+    my-vers[bn="1"]:before {
+         content: "\A\A\A\A";
+         white-space: pre;
+     }
+
 }
