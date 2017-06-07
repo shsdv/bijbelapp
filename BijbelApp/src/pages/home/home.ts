@@ -16,7 +16,9 @@ export class HomePage {
         this.data = data;
         console.log(data);
       });
+      this.syncProvider.checkServerID();
     }
+    
   
   ionViewDidLoad() {
    

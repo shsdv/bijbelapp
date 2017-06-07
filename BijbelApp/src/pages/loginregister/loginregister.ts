@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Settings } from '../../providers/settings';
+import { Synchronizer } from '../../providers/synchronizer';
 import request from 'request';
 import { AlertController } from 'ionic-angular';
 import PouchDB from 'pouchdb';
@@ -19,7 +20,7 @@ export class Loginregister {
   username: string = "";
   password: string = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public settingsProvider: Settings, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public settingsProvider: Settings, private alertCtrl: AlertController, public syncProvider : Synchronizer) {
     this.settingsProvider.getRealLoginName().then(username => this.username = username);
     this.settingsProvider.getRealPassword().then(password => this.password = password);
   }
@@ -69,7 +70,9 @@ export class Loginregister {
   }
 
   saveCredentials() {
-    this.settingsProvider.setCredentials(this.username, this.password);
+    this.settingsProvider.setCredentials(this.username, this.password).then(result => {
+      this.syncProvider.usernamePasswordChanged();
+    });
     let alert = this.alertCtrl.create({
       title: 'Geslaagd',
       subTitle: "De inlogggevens zijn aangepast!",

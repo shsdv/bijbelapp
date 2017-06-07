@@ -17,13 +17,14 @@ import {Loginregister} from '../loginregister/loginregister';
 export class SettingsPage {
   loginName : Promise<string>;
   constructor(public navCtrl: NavController, public navParams: NavParams, public settingsProvider : Settings ) {
-    this.loginName = settingsProvider.getLoginName();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
   }
-
+  ionViewDidEnter() {
+        this.loginName = this.settingsProvider.getLoginName();
+  }
   loginRegister() {
     this.navCtrl.push(Loginregister);
   }

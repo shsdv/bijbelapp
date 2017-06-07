@@ -12,6 +12,7 @@ import PouchDB from 'pouchdb';
 export class Synchronizer {
   private syncSettingKey: string = "syncDbs";
   private localdbs: any[] = [];
+  private replications : any[] = [];
   private remotedbs: any[] = [];
   constructor(public settingsProvider: Settings) {
     console.log('Hello Synchronizer Provider');
@@ -36,7 +37,11 @@ export class Synchronizer {
   }
 
   usernamePasswordChanged() {
-
+    this.checkServerID().then(changed => {
+      if(!changed) {
+        this.reSync(false);
+      }
+    });
   }
 
   getItemsFromDb(dbname, startkey, endkey): Promise<any[]> {
@@ -87,11 +92,12 @@ export class Synchronizer {
         continuous: true,
       };
 
-      local.replicate.from(remote, options);
+      this.replications[dbname] = local.replicate.from(remote, options);
       console.log("Started syncing");
     });
   }
   getOrCreateLocalDb(dbname): Promise<any> {
+    console.log("Local : " + dbname);
     if (this.localdbs.hasOwnProperty(dbname)) {
       return Promise.resolve(this.localdbs[dbname]);
     } else {
@@ -129,7 +135,52 @@ export class Synchronizer {
     });
   }
 
+  cancelSyncs(){
+    Object.keys(this.replications).forEach(replicationKey => {
+      this.replications[replicationKey].cancel();
+      delete this.replications[replicationKey];
+    });
+  }
 
+  reSync(withLocalDelete : boolean) {
+    this.cancelSyncs();
+    Object.keys(this.localdbs).forEach(localDbName => {
+      if(withLocalDelete) {
+        console.log("Deleting and destroying local db with name: " + localDbName);
+        this.localdbs[localDbName].destroy();
+      } else {
+        console.log("Deleting local db with name: " + localDbName);
+        this.localdbs[localDbName].close();
+      }
+      delete this.localdbs[localDbName];
+    });
+
+    Object.keys(this.remotedbs).forEach(remoteDbName => {
+      console.log("Deleting remote db with name: " + remoteDbName);
+      this.remotedbs[remoteDbName].close();
+      delete this.remotedbs[remoteDbName];
+    });
+
+    this.syncAllDbs();
+  }
+  checkServerID() : Promise<boolean> {
+    return this.getOrMakeRemoteDb("serverinfo").then(db => {
+      let IDSettingsDoc = db.get("serverID");
+      let servIdSaved = this.settingsProvider.getSetting("serverID");
+
+      return Promise.all([IDSettingsDoc, servIdSaved]).then(values => {
+        console.log("Remote server id: "+ values[0].serverID);
+        if(values[0].serverID != values[1]){
+          this.settingsProvider.setsetting("serverID", values[0].serverID);
+          this.reSync(true);
+          return true;
+        } else {
+          return false;
+        }
+      });
+    });
+    
+  }
   getOnlySynctAvailable(): Promise<boolean> {
     return this.settingsProvider.getSetting("onlySynct").then(val => {
       if (val == null) {

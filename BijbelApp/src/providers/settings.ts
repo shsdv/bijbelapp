@@ -13,6 +13,7 @@ import {Synchronizer} from './synchronizer';
 export class Settings {
   private cache: any = [];
   private settingsDB: any;
+
   constructor() {
     console.log('Hello Settings Provider');
     this.settingsDB = new PouchDB("settings");
@@ -109,10 +110,13 @@ export class Settings {
       }
     });
   }
-  public setCredentials(username : string, password : string) {
+  public setCredentials(username : string, password : string) : Promise<boolean> {
     let p1 = this.setsetting(this.usernameSettingStr, username);
     let p2 = this.setsetting(this.passwordSettingStr, password);
-    //Promise.all([p1, p2]).then(result => this.syncProvider.usernamePasswordChanged());
+    return Promise.all([p1, p2]).then(result => {
+      return true;
+    });
+
   }
   getRealPassword(): Promise<string> {
     return this.getSetting(this.passwordSettingStr).then(pwd => {
