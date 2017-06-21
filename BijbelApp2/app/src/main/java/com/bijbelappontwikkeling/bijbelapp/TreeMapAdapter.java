@@ -71,7 +71,7 @@ public class TreeMapAdapter extends ArrayAdapter<String> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.textView.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("Clicked!");
