@@ -23,6 +23,8 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         if(!firstSyncCompleted) {
+            SyncProvider.context = this;
+            SyncProvider.readDbs();
             SyncProvider.runSyncTask task = new SyncProvider.runSyncTask(this);
             task.execute(SyncProvider.SyncMainMenusDbName);
             firstSyncCompleted = true;

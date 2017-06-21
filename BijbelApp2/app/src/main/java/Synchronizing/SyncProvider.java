@@ -8,6 +8,7 @@ package Synchronizing;
 import android.app.ProgressDialog;
 import android.content.*;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.widget.ListView;
 
 import java.net.*;
@@ -36,7 +37,35 @@ public class SyncProvider {
         });
 
     }
+    public static void serializeAndWriteSyncedDbs() {
+        try {
+            FileOutputStream fileOut =  context.openFileOutput( "syncedDbs.ser", 0);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(syncedDbs);
+            out.close();
+            fileOut.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+    public static  android.content.Context context = null;
+    public static void readDbs() {
+        try {
+            FileInputStream fileIn = context.openFileInput("syncedDbs.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            syncedDbs = (HashMap<String, TreeMap<String, HashMap<String, Object>>>) in.readObject();
+            in.close();
+            fileIn.close();
+        }catch(IOException i) {
+            i.printStackTrace();
+            return;
+        }catch(ClassNotFoundException c) {
+            System.out.println("Employee class not found");
+            c.printStackTrace();
+            return;
+        }
 
+    }
     public static String getDb(String dbname, String query) {
         String baseURL = "https://bijbelapp.duckdns.org:5984/";
         URL url;
@@ -123,16 +152,21 @@ public class SyncProvider {
     }
 
     public static Boolean addSync(String dbname) {
-        TreeMap<String, HashMap<String, Object>> docs =getDocs(dbname, "");
-        if(docs != null) {
-            syncedDbs.put(dbname, docs);
-            return true;
+        if(!syncedDbs.containsKey(dbname)) {
+            TreeMap<String, HashMap<String, Object>> docs = getDocs(dbname, "");
+
+            if (docs != null) {
+                syncedDbs.put(dbname, docs);
+                serializeAndWriteSyncedDbs();
+                return true;
+            }
         }
         return false;
     }
 
     public static void removeSync(String dbname) {
         syncedDbs.remove(dbname);
+        serializeAndWriteSyncedDbs();
     }
 
     public static class runSyncTask extends AsyncTask<String, Integer, Boolean> {
