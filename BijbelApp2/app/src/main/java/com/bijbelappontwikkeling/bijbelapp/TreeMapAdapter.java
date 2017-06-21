@@ -56,7 +56,7 @@ public class TreeMapAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder = null;
         if (convertView == null) {
@@ -67,34 +67,35 @@ public class TreeMapAdapter extends ArrayAdapter<String> {
             holder.textView = (TextView) convertView.findViewById(R.id.label);
             holder.key = keys[position];
             convertView.setTag(holder);
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("Clicked!");
-                    String key = ((ViewHolder) v.getTag()).key;
-                    HashMap<String, Object> doc = mData.get(key);
-                    String dbname = (String) doc.get("dbname");
-                    if(dbname == null)
-                        dbname = currentDbName;
 
-                    String startkey = (String) doc.get("startkey");
-                    String endkey = (String) doc.get("endkey");
-                    System.out.println("dbname: " + dbname + " startkey: " + startkey + " endkey: " + endkey + " nextIsContent" + doc.get("nextIsContent"));
-                    Intent intent;
-                    if(doc.get("nextIsContent") != null && doc.get("nextIsContent").equals("1")) {
-                        intent = new Intent(context, Content.class);
-                    } else {
-                        intent = new Intent(context, Menu.class);
-                    }
-                    intent.putExtra(Menu.EXTRA_DBNAME, dbname);
-                    intent.putExtra(Menu.EXTRA_STARTKEY, startkey);
-                    intent.putExtra(Menu.EXTRA_ENDKEY, endkey);
-                    context.startActivity(intent);
-                }
-            });
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Clicked!");
+                String key = keys[position];
+                HashMap<String, Object> doc = mData.get(key);
+                String dbname = (String) doc.get("dbname");
+                if(dbname == null)
+                    dbname = currentDbName;
+
+                String startkey = (String) doc.get("startkey");
+                String endkey = (String) doc.get("endkey");
+                System.out.println("dbname: " + dbname + " startkey: " + startkey + " endkey: " + endkey + " nextIsContent" + doc.get("nextIsContent"));
+                Intent intent;
+                if(doc.get("nextIsContent") != null && doc.get("nextIsContent").equals("1")) {
+                    intent = new Intent(context, Content.class);
+                } else {
+                    intent = new Intent(context, Menu.class);
+                }
+                intent.putExtra(Menu.EXTRA_DBNAME, dbname);
+                intent.putExtra(Menu.EXTRA_STARTKEY, startkey);
+                intent.putExtra(Menu.EXTRA_ENDKEY, endkey);
+                context.startActivity(intent);
+            }
+        });
         holder.textView.setText(values[position]);
         return convertView;
     }
