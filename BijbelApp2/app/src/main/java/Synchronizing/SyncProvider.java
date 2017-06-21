@@ -5,16 +5,27 @@ package Synchronizing;
  */
 
 
+import android.app.ProgressDialog;
+import android.content.*;
+import android.os.AsyncTask;
+import android.widget.ListView;
+
 import java.net.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.io.*;
 import java.util.ArrayList;
 
+import com.bijbelappontwikkeling.bijbelapp.R;
+import com.bijbelappontwikkeling.bijbelapp.TreeMapAdapter;
 import com.owlike.genson.*;
+import com.owlike.genson.Context;
 
 public class SyncProvider {
+    private static ArrayList<String> mainMenuSyncs = new ArrayList<String>();
     private static HashMap<String, TreeMap<String, HashMap<String, Object>>> syncedDbs = new HashMap<String, TreeMap<String, HashMap<String, Object>>>();
     public static void login(final String username, final String password) {
         Authenticator.setDefault(new Authenticator() {
@@ -60,6 +71,8 @@ public class SyncProvider {
     private static TreeMap<String, HashMap<String, Object>> getDocs(String dbname, String extraQuery){
         Genson deserializer = new Genson();
         TreeMap<String, ArrayList<HashMap<String, Object>>> allInfo = deserializer.deserialize(getDb(dbname, "_all_docs?include_docs=true" + extraQuery), TreeMap.class);
+        if(allInfo == null)
+            return null;
         ArrayList<HashMap<String, Object>> rows = allInfo.get("rows");
         TreeMap<String, HashMap<String, Object>> map = new TreeMap<String, HashMap<String, Object>>();
         for(int i = 0; i < rows.size(); i++){
@@ -89,13 +102,63 @@ public class SyncProvider {
             }
         }
     }
+    public final static String SyncMainMenusDbName = "_MainMenus";
+    private static void SyncMainMenus() {
+        addSync("hoofdmenu");
+        mainMenuSyncs.add("hoofdmenu");
+        SortedMap<String, HashMap<String, Object>> docs = SyncProvider.getAllDocs("hoofdmenu");
+        if(docs == null)
+            return;
+        for(Map.Entry<String, HashMap<String, Object>> doc : docs.entrySet()) {
+            String subdb = (String)doc.getValue().get("dbname");
+            addSync(subdb);
+            mainMenuSyncs.add(subdb);
+        }
+    }
+    public static boolean isSynct(String dbname) {
+        return syncedDbs.containsKey(dbname);
+    }
+    public static boolean isSyncable(String dbname) {
+        return !mainMenuSyncs.contains(dbname);
+    }
 
-    public static void addSync(String dbname) {
-        syncedDbs.put(dbname, getDocs(dbname, ""));
+    public static Boolean addSync(String dbname) {
+        TreeMap<String, HashMap<String, Object>> docs =getDocs(dbname, "");
+        if(docs != null) {
+            syncedDbs.put(dbname, docs);
+            return true;
+        }
+        return false;
     }
 
     public static void removeSync(String dbname) {
         syncedDbs.remove(dbname);
+    }
+
+    public static class runSyncTask extends AsyncTask<String, Integer, Boolean> {
+        final ProgressDialog dialog;
+        private String dbname;
+        public runSyncTask(android.content.Context context) {
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("Synchroniseren...");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+        }
+        protected void onPreExecute(){
+            dialog.show();
+        }
+        protected Boolean doInBackground(String... args) {
+            SyncProvider.login("wJvPUP", "bOlwofshNZuobBqmhF2bPgZb");
+            dbname = args[0];
+            if(SyncMainMenusDbName.equals(dbname))
+                SyncMainMenus();
+            else
+                addSync(dbname);
+            return true;
+        }
+        protected void onPostExecute(Boolean result) {
+            dialog.hide();
+        }
     }
 
 }

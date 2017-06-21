@@ -17,11 +17,16 @@ public class Menu extends AppCompatActivity {
     public final static String EXTRA_DBNAME = "dbname";
     public final static String EXTRA_STARTKEY = "startkey";
     public final static String EXTRA_ENDKEY = "endkey";
-
+    private static Boolean firstSyncCompleted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        if(!firstSyncCompleted) {
+            SyncProvider.runSyncTask task = new SyncProvider.runSyncTask(this);
+            task.execute(SyncProvider.SyncMainMenusDbName);
+            firstSyncCompleted = true;
+        }
         Intent intent = getIntent();
         new downloadMenuItems(this).execute(intent.getStringExtra(EXTRA_DBNAME),
                 intent.getStringExtra(EXTRA_STARTKEY),
@@ -46,11 +51,13 @@ public class Menu extends AppCompatActivity {
                 return SyncProvider.getSubsetOfDocs(dbname, args[1], args[2]);
         }
         protected void onPostExecute(SortedMap<String, HashMap<String, Object>> result) {
-            Set<String> keySetSet = result.keySet();
-            String[] keySet = keySetSet.toArray(new String[0]);
-            TreeMapAdapter adapter = new TreeMapAdapter(this.mContext, keySet, result, dbname);
-            ListView listview = (ListView) findViewById(R.id.listview);
-            listview.setAdapter(adapter);
+            if(result != null) {
+                Set<String> keySetSet = result.keySet();
+                String[] keySet = keySetSet.toArray(new String[0]);
+                TreeMapAdapter adapter = new TreeMapAdapter(this.mContext, keySet, result, dbname);
+                ListView listview = (ListView) findViewById(R.id.listview);
+                listview.setAdapter(adapter);
+            }
         }
     }
 

@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import Synchronizing.SyncProvider;
 
 public class TreeMapAdapter extends ArrayAdapter<String> {
     private final Context context;
@@ -20,7 +24,7 @@ public class TreeMapAdapter extends ArrayAdapter<String> {
     private final SortedMap<String, HashMap<String, Object>> mData;
     private final String currentDbName;
     public static class ViewHolder {
-        String key;
+        Switch syncSwitch;
         TextView textView;
     }
 
@@ -65,7 +69,7 @@ public class TreeMapAdapter extends ArrayAdapter<String> {
                     parent, false);
             holder = new ViewHolder();
             holder.textView = (TextView) convertView.findViewById(R.id.label);
-            holder.key = keys[position];
+            holder.syncSwitch = (Switch) convertView.findViewById(R.id.switch1);
             convertView.setTag(holder);
 
         } else {
@@ -96,6 +100,25 @@ public class TreeMapAdapter extends ArrayAdapter<String> {
                 context.startActivity(intent);
             }
         });
+        final String dbname = (String) mData.get(keys[position]).get("dbname");
+        if(dbname != null && SyncProvider.isSyncable(dbname)) {
+            holder.syncSwitch.setVisibility(View.VISIBLE);
+            holder.syncSwitch.setOnCheckedChangeListener(null);
+            holder.syncSwitch.setChecked(SyncProvider.isSynct(dbname));
+            holder.syncSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        SyncProvider.runSyncTask task = new SyncProvider.runSyncTask(context);
+                        task.execute(dbname);
+                    } else {
+                        SyncProvider.removeSync(dbname);
+                    }
+                }
+            });
+        }else{
+            holder.syncSwitch.setVisibility(View.GONE);
+        }
         holder.textView.setText(values[position]);
         return convertView;
     }
